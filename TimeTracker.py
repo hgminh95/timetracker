@@ -41,6 +41,7 @@ class TimeTracker:
         row_print_format = "|%2s|%20s|%15s|"
         sperate_row = '+' + '--' + '+' + '-'*20 + '+' + '-'*15 + '+'
 
+        print("Application time tracking")
         print(sperate_row)
         print(row_print_format % ("#", "Application", "Using time"))
         print(sperate_row)
