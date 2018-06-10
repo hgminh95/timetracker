@@ -5,12 +5,12 @@ from AppKit import NSWorkspace
 
 class TimeTracker:
     
-    # API
+    # Public methods
     def track(self):
         while True:
             print(time.time())
-            self.__instances.append((int(time.time()), self.__get_current_app_name()))
-            print(self.__instances)
+            self.__instances.append((self.__get_current_app_name(), int(time.time())))
+            print(self.__create_app_list())
             time.sleep(self.__interval)
 
     # Private methods
@@ -21,6 +21,20 @@ class TimeTracker:
     def __get_current_app_name(self):
         current_app = NSWorkspace.sharedWorkspace().activeApplication()
         return current_app['NSApplicationName']
+
+    def __create_app_list(self):
+        if not self.__instances:
+            return {}
+        else:
+            app_list = {}
+            cur_time = self.__instances[0][1]
+            for (app, time) in self.__instances:
+                if (app in app_list):
+                    app_list[app] += (time - cur_time)
+                else:
+                    app_list[app] = 0
+                cur_time = time
+            return app_list
 
 
 def main(argv):
