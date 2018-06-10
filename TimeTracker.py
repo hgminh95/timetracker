@@ -8,46 +8,46 @@ class TimeTracker:
     # Public methods
     def track(self):
         while True:
-            self.__add_instace(self.__get_current_app_name(), int(time.time()))
-            if (self.__total_time > 0):
-                self.__pretty_format_app_list(self.__app_list, self.__total_time)
+            self._add_instace(self._get_current_app_name(), int(time.time()))
+            if (self._total_time > 0):
+                self._pretty_format_app_list(self._app_list, self._total_time)
             else:
                 print("Calculating...")
-            time.sleep(self.__interval)
+            time.sleep(self._interval)
 
     # Private methods
     def __init__(self, interval = 1):
-        self.__interval = interval
-        self.__app_list = {}
-        self.__total_time = 0
-        self.__current_time = int(time.time())
+        self._interval = interval
+        self._app_list = {}
+        self._total_time = 0
+        self._current_time = int(time.time())
 
-    def __add_instace(self, app, time):
-        time_delta = time - self.__current_time
-        if (app in self.__app_list):
-            self.__app_list[app] += time_delta
+    def _add_instace(self, app, time):
+        time_delta = time - self._current_time
+        if (app in self._app_list):
+            self._app_list[app] += time_delta
         else:
-            self.__app_list[app] = time_delta
-        self.__total_time += time_delta
-        self.__current_time = time
+            self._app_list[app] = time_delta
+        self._total_time += time_delta
+        self._current_time = time
     
-    def __get_current_app_name(self):
+    def _get_current_app_name(self):
         current_app = NSWorkspace.sharedWorkspace().activeApplication()
         return current_app['NSApplicationName']
 
-    def __pretty_format_app_list(self, app_list, total_time):
+    def _pretty_format_app_list(self, app_list, total_time):
         os.system('cls||clear')
         sorted_app_list = sorted(app_list.items(), key = lambda x: x[1], reverse = True)
-        row_print_format = "|%2s|%20s|%15s|%8s|"
+        row_print_format = "|{:>2}|{:>20}|{:>15}|{:>8}|"
         sperate_row = '+' + '--' + '+' + '-'*20 + '+' + '-'*15 + '+' + '-'*8 + '+'
 
         print("Application time tracking")
         print(sperate_row)
-        print(row_print_format % ("#", "Application", "Using time", "Percent"))
+        print(row_print_format.format("#", "Application", "Using time", "Percent"))
         print(sperate_row)
         for idx, (app, time) in enumerate(sorted_app_list):
-            using_percent = "%.1f" % (time/total_time*100)
-            print(row_print_format % (
+            using_percent = "{:.1f}".format(time*1.0/total_time*100)
+            print(row_print_format.format(
                 idx+1,
                 app,
                 str(datetime.timedelta(seconds = time)),
