@@ -8,10 +8,10 @@ If you are using python3, you may have to install `pyobjc` by using `pip3`
 > ```pip3 install -U pyobjc```
 
 ## Running
-> `python TimeTracker.py`
+> `python time_tracker.py`
 
 Or if you are using python 3
-> `python3 TimeTracker.py`
+> `python3 time_tracker.py`
 
 ## Example
 ```
