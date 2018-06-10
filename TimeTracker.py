@@ -8,36 +8,32 @@ class TimeTracker:
     # Public methods
     def track(self):
         while True:
-            self.__instances.append((self.__get_current_app_name(), int(time.time())))
-            (app_list, total_time) = self.__create_app_list()
-            self.__pretty_format_app_list(app_list, total_time)
+            self.__add_instace(self.__get_current_app_name(), int(time.time()))
+            if (self.__total_time > 0):
+                self.__pretty_format_app_list(self.__app_list, self.__total_time)
+            else:
+                print("Calculating...")
             time.sleep(self.__interval)
 
     # Private methods
     def __init__(self, interval = 1):
-        self.__instances = []
         self.__interval = interval
+        self.__app_list = {}
+        self.__total_time = 0
+        self.__current_time = int(time.time())
+
+    def __add_instace(self, app, time):
+        time_delta = time - self.__current_time
+        if (app in self.__app_list):
+            self.__app_list[app] += time_delta
+        else:
+            self.__app_list[app] = time_delta
+        self.__total_time += time_delta
+        self.__current_time = time
     
     def __get_current_app_name(self):
         current_app = NSWorkspace.sharedWorkspace().activeApplication()
         return current_app['NSApplicationName']
-
-    def __create_app_list(self):
-        if not self.__instances:
-            return ({}, 0)
-        else:
-            app_list = {}
-            cur_time = self.__instances[0][1] - self.__interval
-            total_time = 0
-            for (app, time) in self.__instances:
-                time_delta = time - cur_time
-                if (app in app_list):
-                    app_list[app] += time_delta
-                else:
-                    app_list[app] = time_delta
-                total_time += time_delta
-                cur_time = time
-            return (app_list, total_time)
 
     def __pretty_format_app_list(self, app_list, total_time):
         os.system('cls||clear')
