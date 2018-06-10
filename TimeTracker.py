@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import sys, time
+import os, datetime, sys, time
 from AppKit import NSWorkspace
 
 class TimeTracker:
@@ -8,9 +8,8 @@ class TimeTracker:
     # Public methods
     def track(self):
         while True:
-            print(time.time())
             self.__instances.append((self.__get_current_app_name(), int(time.time())))
-            print(self.__create_app_list())
+            self.__pretty_format_app_list(self.__create_app_list())
             time.sleep(self.__interval)
 
     # Private methods
@@ -35,6 +34,19 @@ class TimeTracker:
                     app_list[app] = 0
                 cur_time = time
             return app_list
+
+    def __pretty_format_app_list(self, app_list):
+        os.system('cls||clear')
+        sorted_app_list = sorted(app_list.items(), key = lambda x: x[1], reverse = True)
+        row_print_format = "|%2s|%20s|%15s|"
+        sperate_row = '+' + '--' + '+' + '-'*20 + '+' + '-'*15 + '+'
+
+        print(sperate_row)
+        print(row_print_format % ("#", "Application", "Using time"))
+        print(sperate_row)
+        for idx, (app, time) in enumerate(sorted_app_list):
+            print(row_print_format % (idx+1, app, str(datetime.timedelta(seconds = time))))
+        print(sperate_row)
 
 
 def main(argv):
